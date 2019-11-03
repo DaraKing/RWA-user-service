@@ -1,5 +1,7 @@
+let responses = require('../common/responses');
+
 module.exports = {
     test: function (req,resp) {
-        resp.send('It is okay', 200);
+        responses.statusOk(req, resp, 'Koje?!?');
     }
 };
