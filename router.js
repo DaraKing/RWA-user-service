@@ -7,7 +7,8 @@ module.exports = function(app) {
         api.get('/test', test.test);
 
         api.group("/auth", (auth) => {
-            auth.post('/register', authController.register)
+            auth.post('/register', authController.register);
+            auth.post('/login', authController.login);
         })
     });
 

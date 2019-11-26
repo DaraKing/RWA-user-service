@@ -1,5 +1,5 @@
 module.exports = {
     INVALID_EMAIL: "Invalid email",
     PASSWORD_MISMATCH: "Password mismatch",
-    DATABASE_ERROR: "Database error",
+    DATABASE_ERROR: '{"message": "Database error"}',
 };

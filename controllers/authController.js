@@ -18,23 +18,17 @@ module.exports = {
 
         let passwordHash = hash.hashPassword(req.body.password);
 
-        database.pool.getConnection((err, conn) => {
-           if(err) {
-               console.log(err);
-               responses.internalServerErr(req, resp, messages.DATABASE_ERROR);
-               return
-           }
+        let sql = `INSERT INTO users(first_name,last_name,password,email,age,country, city) VALUES ("${req.body.first_name}", "${req.body.last_name}", "${passwordHash}", "${req.body.email}", ${req.body.age}, "${req.body.country}", "${req.body.city}")`
 
-           let query = `INSERT INTO users(first_name,last_name,password,email,age,country, city) VALUES ("${req.body.first_name}", "${req.body.last_name}", "${passwordHash}", "${req.body.email}", ${req.body.age}, "${req.body.country}", "${req.body.city}")`;
-
-           conn.query(query, (err) => {
-                conn.release();
-                if(err) {
-                    console.log(err);
-                }
-           });
-
-            responses.statusOk(req, resp, '{"message": "User has been successfully registered!"}');
+        database.exec(sql, (error, response) => {
+            if(error) {
+                responses.internalServerErr(req, resp, messages.DATABASE_ERROR);
+            }else {
+                responses.statusOk(req, resp, '{"message": "User has been successfully registered!"}')
+            }
         });
+    },
+    login: function (req, resp) {
+        
     }
 };
