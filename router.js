@@ -1,6 +1,8 @@
 const port = 4000;
 let test = require('./controllers/testController');
 let cors = require('cors');
+var https = require('https');
+var fs = require('fs')
 let authController = require('./controllers/authController');
 
 let corsOptions = {
@@ -18,5 +20,8 @@ module.exports = function(app) {
         })
     });
 
-    app.listen(port, () => console.log(`[USER SERVICE] Listening on port ${port}`));
+    https.createServer({
+        key: fs.readFileSync('server.key'),
+        cert: fs.readFileSync('server.cert')
+    }, app).listen(port, () => console.log(`[USER SERVICE] Listening on port ${port}`));
 };
