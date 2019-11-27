@@ -3,6 +3,7 @@ let hash = require('../common/hash');
 let validators = require('../common/validators');
 let messages = require("../common/messages");
 let database = require("../database");
+let token = require("../common/token");
 
 module.exports = {
     register: function (req,resp) {
@@ -24,11 +25,49 @@ module.exports = {
             if(error) {
                 responses.internalServerErr(req, resp, messages.DATABASE_ERROR);
             }else {
-                responses.statusOk(req, resp, '{"message": "User has been successfully registered!"}')
+                responses.statusOk(req, resp, '{"message": "User has been successfully registered!"}');
             }
         });
     },
     login: function (req, resp) {
-        
+        if(!validators.email(req.body.email)) {
+            responses.badRequest(req, resp, messages.INVALID_EMAIL);
+            return;
+        }
+
+        if(!req.body.password) {
+            responses.badRequest(req, resp, messages.PASSWORD_EMPTY);
+            return;
+        }
+
+        let sql = `SELECT * FROM users WHERE email = '${req.body.email}'`;
+
+        database.exec(sql, (error, response) => {
+
+            if(error) {
+                responses.internalServerErr(req, resp, messages.DATABASE_ERROR);
+            }else {
+
+                if(!hash.comparePasswords(req.body.password, response[0].password)) {
+                    responses.badRequest(req, resp, messages.PASSWORD_MISMATCH);
+                    return;
+                }
+
+                let userToken = token.generate(response[0]);
+
+                let insertSql = `INSERT INTO user_tokens(user_id, user_token) VALUES ("${response[0].user_id}", "${userToken}")`;
+
+                database.exec(insertSql, (error, _ ) => {
+                    if(error) {
+                        responses.internalServerErr(req, resp, messages.DATABASE_ERROR);
+                        return
+                    }else {
+                        response[0]["user_token"] = userToken;
+                        responses.statusOk(req, resp, response[0]);
+                    }
+                });
+
+            }
+        });
     }
 };

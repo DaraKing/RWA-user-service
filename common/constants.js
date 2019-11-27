@@ -4,4 +4,5 @@ module.exports = {
     DB_PASSWORD:    'aesdrFR12.',
     DB_NAME:        'rwa_project',
     BCRYPT_SALT:    10,
+    SECRET_KEY:     'jesVragaSecret'
 };
