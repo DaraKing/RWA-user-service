@@ -2,6 +2,9 @@ const port = 4000;
 let test = require('./controllers/testController');
 let cors = require('cors');
 let authController = require('./controllers/authController');
+let usersController = require('./controllers/usersController');
+let rolesController = require('./controllers/rolesController');
+let middleware = require('./common/middleware');
 
 module.exports = function(app) {
 
@@ -30,7 +33,17 @@ module.exports = function(app) {
         api.group("/auth", (auth) => {
             auth.post('/register', authController.register);
             auth.post('/login', authController.login);
-        })
+        });
+
+        api.group("/roles", (roles) => {
+            roles.get("/all", middleware.admin, rolesController.getAllRoles);
+        });
+
+        api.group("/users", (users) => {
+             users.get('/all', middleware.admin, usersController.getAllUsers);
+             users.get('/:userId', middleware.admin ,usersController.getUserById);
+             users.put('/:userId', middleware.admin, usersController.updateUser);
+        });
     });
 
     app.listen(port, () => console.log(`[USER SERVICE] Listening on port ${port}`));
