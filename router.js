@@ -4,7 +4,10 @@ let cors = require('cors');
 let authController = require('./controllers/authController');
 let usersController = require('./controllers/usersController');
 let rolesController = require('./controllers/rolesController');
+let contestController = require('./controllers/contestController');
 let middleware = require('./common/middleware');
+const express = require('express');
+const path = require('path');
 
 module.exports = function(app) {
 
@@ -27,6 +30,8 @@ module.exports = function(app) {
         next();
     });
 
+    app.get("/", express.static(path.join(__dirname, "./images")));
+
     app.group("/api", (api) => {
         api.get('/test', test.test);
 
@@ -44,7 +49,15 @@ module.exports = function(app) {
              users.get('/:userId', middleware.admin ,usersController.getUserById);
              users.put('/:userId', middleware.admin, usersController.updateUser);
         });
+
+        api.group("/contest", (contest) => {
+            contest.get('/all', middleware.admin, contestController.getAllContests);
+            contest.post('/create', middleware.admin, contestController.createContest);
+            contest.get('/:contestId', middleware.admin, contestController.getSingleContest);
+            contest.put('/:contestId', middleware.admin, contestController.updateContest);
+            contest.delete('/:contestId', middleware.admin, contestController.deleteContest);
+        });
     });
 
-    app.listen(port, () => console.log(`[USER SERVICE] Listening on port ${port}`));
+    app.listen(port, () => console.log(`[MULTI SERVICE] Listening on port ${port}`));
 };
