@@ -40,7 +40,7 @@ module.exports = {
             return;
         }
 
-        let sql = `SELECT * FROM users WHERE email = '${req.body.email}'`;
+        let sql = `SELECT * FROM users INNER JOIN roles ON users.role_id=roles.role_id WHERE email = '${req.body.email}'`;
 
         database.exec(sql, (error, response) => {
 

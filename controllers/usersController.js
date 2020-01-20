@@ -4,7 +4,7 @@ let messages = require("../common/messages");
 
 module.exports = {
     getAllUsers: function (req, resp) {
-        let sql = `SELECT * FROM users`;
+        let sql = `SELECT * FROM users INNER JOIN roles ON users.role_id=roles.role_id`;
 
         database.exec(sql, (error, response) => {
             if(error) {
