@@ -5,9 +5,31 @@ let authController = require('./controllers/authController');
 let usersController = require('./controllers/usersController');
 let rolesController = require('./controllers/rolesController');
 let contestController = require('./controllers/contestController');
+let imageController = require('./controllers/imageController');
 let middleware = require('./common/middleware');
+
 const express = require('express');
 const path = require('path');
+
+const multer = require('multer');
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './images/');
+    },
+    filename: function(req, file, cb) {
+        cb(null, Date.now().toString() + path.extname(file.originalname));
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+        cb(null, true);
+    }else {
+        cb(null, false);
+    }
+};
+
+const upload = multer({storage, fileFilter});
 
 module.exports = function(app) {
 
@@ -30,7 +52,7 @@ module.exports = function(app) {
         next();
     });
 
-    app.get("/", express.static(path.join(__dirname, "./images")));
+    app.use('/images', express.static('images'));
 
     app.group("/api", (api) => {
         api.get('/test', test.test);
@@ -56,6 +78,10 @@ module.exports = function(app) {
             contest.get('/:contestId', middleware.admin, contestController.getSingleContest);
             contest.put('/:contestId', middleware.admin, contestController.updateContest);
             contest.delete('/:contestId', middleware.admin, contestController.deleteContest);
+        });
+
+        api.group("/contest-photo", (contestImage) => {
+            contestImage.post('/upload', upload.single('image'), imageController.uploadPicture);
         });
     });
 
