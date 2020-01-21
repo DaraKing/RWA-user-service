@@ -82,6 +82,7 @@ module.exports = function(app) {
 
         api.group("/contest-photo", (contestImage) => {
             contestImage.post('/upload', upload.single('image'), imageController.uploadPicture);
+            contestImage.delete('/:imageId', imageController.deleteImage);
         });
     });
 
