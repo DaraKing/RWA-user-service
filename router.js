@@ -5,6 +5,7 @@ let authController = require('./controllers/authController');
 let usersController = require('./controllers/usersController');
 let rolesController = require('./controllers/rolesController');
 let contestController = require('./controllers/contestController');
+let categoryController = require('./controllers/categoryController');
 let imageController = require('./controllers/imageController');
 let middleware = require('./common/middleware');
 
@@ -78,6 +79,14 @@ module.exports = function(app) {
             contest.get('/:contestId', middleware.admin, contestController.getSingleContest);
             contest.put('/:contestId', middleware.admin, contestController.updateContest);
             contest.delete('/:contestId', middleware.admin, contestController.deleteContest);
+        });
+
+        api.group("/category", (category) => {
+            category.get('/all', middleware.admin, categoryController.getAllCategory);
+            category.post('/create', middleware.admin, categoryController.createCategory);
+            category.get('/:categoryId', middleware.admin, categoryController.getSingleCategory);
+            category.put('/:categoryId', middleware.admin, categoryController.updateCategory);
+            category.delete('/:categoryId', middleware.admin, categoryController.deleteCategory);
         });
 
         api.group("/contest-photo", (contestImage) => {

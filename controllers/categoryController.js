@@ -3,9 +3,9 @@ let responses = require('../common/responses');
 let messages = require("../common/messages");
 
 module.exports = {
-    // ID param from URL you will get using req.params["contestId"]
-    getAllContests: function (req, resp) {
-        let sql = `SELECT * FROM contest `;
+    // ID param from URL you will get using req.params["category_id"]
+    getAllCategory: function (req, resp) {
+        let sql = `SELECT * FROM categories `;
 
         database.exec(sql, (error, response) => {
             if(error) {
@@ -15,8 +15,8 @@ module.exports = {
             }
         });
     },
-    getSingleContest: function (req, resp) {
-        let sql = `SELECT * FROM contest WHERE contest_id = '${req.params["contest_id"]}'`;
+    getSingleCategory: function (req, resp) {
+        let sql = `SELECT * FROM categories WHERE category_id = '${req.params["category_id"]}'`;
 
         database.exec(sql, (error, response) => {
             if(error) {
@@ -26,36 +26,38 @@ module.exports = {
             }
         });
     },
-    createContest: function (req, resp) {
-        let sql = `INSERT INTO contest (contest_start, contest_end) VALUES ('${req.body.contest_start}', '${req.body.contest_end}')`;
+    createCategory: function (req, resp) {
+        let sql = `INSERT INTO categories (category_name, category_description) VALUES ('${req.body.category_name}', '${req.body.category_description}')`;
+
         database.exec(sql, (error, response) => {
             if(error) {
                 responses.internalServerErr(req, resp, messages.DATABASE_ERROR);
             }else {
-                responses.statusOk(req, resp, '{"message": "Contest data has been successfully created!"}');
+                responses.statusOk(req, resp, '{"message": "Category data has been successfully created!"}');
             }
         });
     },
-    updateContest: function (req, resp) {
-        let sql = `UPDATE contest SET contest_start ='${req.body.contest_start}', contest_end='${req.body.contest_end}'`;
+    updateCategory: function (req, resp) {
+        let sql = `UPDATE categories SET category_name ='${req.body.category_name}', category_description='${req.body.category_description}'`;
 
         database.exec(sql, (error, response) => {
             if(error) {
                 responses.internalServerErr(req, resp, messages.DATABASE_ERROR);
             }else {
-                responses.statusOk(req, resp, '{"message": "Contest data has been successfully changed!"}');
+                responses.statusOk(req, resp, '{"message": "Category data has been successfully changed!"}');
             }
         })
     },
-    deleteContest: function (req, resp) {
-        let sql = `DELETE FROM contest WHERE contest_id='${req.body.contest_id}'`;
+    deleteCategory: function (req, resp) {
+        let sql = `DELETE FROM categories WHERE category_id='${req.body.category_id}'`;
 
         database.exec(sql, (error, response) => {
             if(error) {
                 responses.internalServerErr(req, resp, messages.DATABASE_ERROR);
             }else {
-                responses.statusOk(req,resp, '{"message": "Contest has been deleted!"}');
+                responses.statusOk(req,resp, '{"message": "Category has been deleted!"}');
             }
         });
     }
 };
+
