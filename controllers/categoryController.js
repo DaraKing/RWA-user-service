@@ -27,12 +27,8 @@ module.exports = {
         });
     },
     createCategory: function (req, resp) {
-<<<<<<< HEAD
-        let sql = `INSERT INTO categories (category_name, category_description) VALUES ('${req.body.category_name}', '${req.body.category_description}')`
-=======
         let sql = `INSERT INTO categories (category_name, category_description) VALUES ('${req.body.category_name}', '${req.body.category_description}')`;
 
->>>>>>> 6a38e37a2929076888d541fcdd62e6fb656dcda0
         database.exec(sql, (error, response) => {
             if(error) {
                 responses.internalServerErr(req, resp, messages.DATABASE_ERROR);
