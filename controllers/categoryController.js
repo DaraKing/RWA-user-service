@@ -4,8 +4,19 @@ let messages = require("../common/messages");
 
 module.exports = {
     // ID param from URL you will get using req.params["categoryId"]
-    getAllCategory: function (req, resp) {
+    getAllCategories: function (req, resp) {
         let sql = `SELECT * FROM categories `;
+
+        database.exec(sql, (error, response) => {
+            if(error) {
+                responses.internalServerErr(req, resp, messages.DATABASE_ERROR);
+            }else {
+                responses.statusOk(req,resp, response);
+            }
+        });
+    },
+    getAllCategoriesWeb: function (req, resp) {
+        let sql = `SELECT * FROM categories LIMIT 3`;
 
         database.exec(sql, (error, response) => {
             if(error) {
