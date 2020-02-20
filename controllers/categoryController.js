@@ -3,7 +3,7 @@ let responses = require('../common/responses');
 let messages = require("../common/messages");
 
 module.exports = {
-    // ID param from URL you will get using req.params["category_id"]
+    // ID param from URL you will get using req.params["categoryId"]
     getAllCategory: function (req, resp) {
         let sql = `SELECT * FROM categories `;
 
@@ -16,7 +16,7 @@ module.exports = {
         });
     },
     getSingleCategory: function (req, resp) {
-        let sql = `SELECT * FROM categories WHERE category_id = '${req.params["category_id"]}'`;
+        let sql = `SELECT * FROM categories WHERE category_id = '${req.params["categoryId"]}'`;
 
         database.exec(sql, (error, response) => {
             if(error) {
@@ -49,7 +49,7 @@ module.exports = {
         })
     },
     deleteCategory: function (req, resp) {
-        let sql = `DELETE FROM categories WHERE category_id='${req.body.category_id}'`;
+        let sql = `DELETE FROM categories WHERE category_id='${req.params["categoryId"]}'`;
 
         database.exec(sql, (error, response) => {
             if(error) {
