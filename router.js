@@ -82,7 +82,7 @@ module.exports = function(app) {
         });
 
         api.group("/category", (category) => {
-            category.get('/all', middleware.admin, categoryController.getAllCategory);
+            category.get('/all', middleware.admin, categoryController.getAllCategories);
             category.get('/web', middleware.admin, categoryController.getAllCategoriesWeb);
             category.post('/create', middleware.admin, categoryController.createCategory);
             category.get('/:categoryId', middleware.admin, categoryController.getSingleCategory);
