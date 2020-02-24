@@ -73,24 +73,25 @@ module.exports = function(app) {
              users.put('/:userId', middleware.admin, usersController.updateUser);
         });
 
-        api.group("/contest", (contest) => {
-            contest.get('/all', middleware.admin, contestController.getAllContests);
-            contest.post('/create', middleware.admin, contestController.createContest);
-            contest.get('/:contestId', middleware.admin, contestController.getSingleContest);
-            contest.put('/:contestId', middleware.admin, contestController.updateContest);
-            contest.delete('/:contestId', middleware.admin, contestController.deleteContest);
-        });
+        // api.group("/contest", (contest) => {
+        //     contest.get('/all', middleware.admin, contestController.getAllContests);
+        //     contest.post('/create', middleware.admin, contestController.createContest);
+        //     contest.get('/:contestId', middleware.admin, contestController.getSingleContest);
+        //     contest.put('/:contestId', middleware.admin, contestController.updateContest);
+        //     contest.delete('/:contestId', middleware.admin, contestController.deleteContest);
+        // });
 
         api.group("/category", (category) => {
             category.get('/all', middleware.admin, categoryController.getAllCategories);
-            category.get('/web', middleware.admin, categoryController.getAllCategoriesWeb);
+            category.get('/web', categoryController.getAllCategoriesWeb);
+            category.get('/web/:categoryId', categoryController.getCategoryWeb);
             category.post('/create', middleware.admin, categoryController.createCategory);
             category.get('/:categoryId', middleware.admin, categoryController.getSingleCategory);
             category.put('/:categoryId', middleware.admin, categoryController.updateCategory);
             category.delete('/:categoryId', middleware.admin, categoryController.deleteCategory);
         });
 
-        api.group("/contest-photo", (contestImage) => {
+        api.group("/category-photo", (contestImage) => {
             contestImage.post('/upload', upload.single('image'), imageController.uploadPicture);
             contestImage.delete('/:imageId', imageController.deleteImage);
         });

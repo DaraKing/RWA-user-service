@@ -26,6 +26,30 @@ module.exports = {
             }
         });
     },
+    getCategoryWeb: function(req, resp) {
+        let sql = `SELECT c.category_id, c.category_name, c.category_description, c.category_image,
+        COALESCE(
+            JSON_ARRAYAGG(
+                JSON_OBJECT(
+                    'contest_photo_id', cp.contest_photo_id,
+                    'photo_filename', cp.photo_filename
+                )
+            ), 
+        '[]') as photos
+        FROM categories AS c
+        LEFT JOIN category_photos AS cp ON cp.category_id = c.category_id
+        LEFT JOIN users AS u ON u.user_id = cp.user_id
+        WHERE c.category_id = ${req.params["categoryId"]}
+        GROUP BY c.category_id, c.category_name, c.category_description, c.category_image`
+
+        database.exec(sql, (error, response) => {
+            if(error) {
+                responses.internalServerErr(req, resp, messages.DATABASE_ERROR);
+            }else {
+                responses.statusOk(req,resp, response);
+            }
+        });
+    },
     getSingleCategory: function (req, resp) {
         let sql = `SELECT * FROM categories WHERE category_id = '${req.params["categoryId"]}'`;
 

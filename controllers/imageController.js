@@ -9,7 +9,7 @@ module.exports = {
 
         let data = token.verify(jwtToken);
 
-        let insertSql = `INSERT INTO contest_photos(photo_filename, user_id, contest_id) VALUES ("${req.file.path}", ${data.user_id}, "${req.body.contest_id}")`;
+        let insertSql = `INSERT INTO category_photos(photo_filename, user_id, contest_id) VALUES ("${req.file.path}", ${data.user_id}, "${req.body.category_id}")`;
 
         database.exec(insertSql, (error, _) => {
             if(error) {
