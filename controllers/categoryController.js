@@ -38,7 +38,7 @@ module.exports = {
         });
     },
     createCategory: function (req, resp) {
-        let sql = `INSERT INTO categories (category_name, category_description) VALUES ('${req.body.category_name}', '${req.body.category_description}')`;
+        let sql = `INSERT INTO categories (category_name, category_description, category_image) VALUES ('${req.body.category_name}', '${req.body.category_description}', '${req.body.category_image}')`;
 
         database.exec(sql, (error, response) => {
             if(error) {
@@ -49,7 +49,7 @@ module.exports = {
         });
     },
     updateCategory: function (req, resp) {
-        let sql = `UPDATE categories SET category_name ='${req.body.category_name}', category_description='${req.body.category_description}'`;
+        let sql = `UPDATE categories SET category_name ='${req.body.category_name}', category_description='${req.body.category_description}', category_image='${req.body.category_image}'`;
 
         database.exec(sql, (error, response) => {
             if(error) {
