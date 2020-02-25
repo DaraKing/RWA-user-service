@@ -2,6 +2,7 @@ let responses = require('../common/responses');
 let database = require("../database");
 let messages = require("../common/messages");
 let token = require("../common/token");
+let common = require("../common/common");
 
 module.exports = {
     uploadPicture: function (req, resp) {
@@ -30,5 +31,21 @@ module.exports = {
                 responses.statusOk(req, resp, '{"message": "Image has been successfully deleted!"}');
             }
         });
+    },
+    likeImage: function (req, resp) {
+
+        let userId = common.getUserId(req);
+
+        let sql = `INSERT INTO user_likes(contest_photo_id, user_id) VALUES ("${req.params["imageId"]}", "${userId}")`;
+
+        database.exec(sql, (error, _) => {
+            if(error) {
+                responses.internalServerErr(req, resp, messages.DATABASE_ERROR);
+                return
+            }else {
+                responses.statusOk(req, resp, '{"message": "Image has been liked successfully !"}');
+            }
+        });
+
     }
 };

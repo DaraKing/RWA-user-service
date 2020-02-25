@@ -94,6 +94,7 @@ module.exports = function(app) {
         api.group("/category-photo", (contestImage) => {
             contestImage.post('/upload', upload.single('image'), imageController.uploadPicture);
             contestImage.delete('/:imageId', imageController.deleteImage);
+            contestImage.post('/like/:imageId', imageController.likeImage);
         });
     });
 
