@@ -46,6 +46,7 @@ module.exports = {
             if(error) {
                 responses.internalServerErr(req, resp, messages.DATABASE_ERROR);
             }else {
+                response[0].photos = JSON.parse(response[0].photos.toString());
                 responses.statusOk(req,resp, response);
             }
         });
