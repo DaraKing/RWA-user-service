@@ -76,7 +76,7 @@ module.exports = {
         });
     },
     updateCategory: function (req, resp) {
-        let sql = `UPDATE categories SET category_name ='${req.body.category_name}', category_description='${req.body.category_description}', category_image='${req.body.category_image}'`;
+        let sql = `UPDATE categories SET category_name ='${req.body.category_name}', category_description='${req.body.category_description}', category_image='${req.body.category_image}' WHERE category_id='${req.params["categoryId"]}'`;
 
         database.exec(sql, (error, response) => {
             if(error) {
