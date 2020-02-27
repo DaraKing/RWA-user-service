@@ -1,6 +1,7 @@
 let database = require("../database");
 let responses = require('../common/responses');
 let messages = require("../common/messages");
+let common = require("../common/common");
 
 module.exports = {
     // ID param from URL you will get using req.params["categoryId"]
@@ -27,11 +28,14 @@ module.exports = {
         });
     },
     getCategoryWeb: function(req, resp) {
+
+        let userId = common.getUserId(req);
+
         let sql = `SELECT c.category_id, c.category_name, c.category_description, c.category_image,
         COALESCE(
             JSON_ARRAYAGG(
                 JSON_OBJECT(
-                    'contest_photo_id', cp.contest_photo_id,
+                    'category_photo_id', cp.category_photo_id,
                     'photo_filename', cp.photo_filename,
                     'first_name', u.first_name,
                     'last_name', u.last_name
@@ -48,8 +52,26 @@ module.exports = {
             if(error) {
                 responses.internalServerErr(req, resp, messages.DATABASE_ERROR);
             }else {
-                response[0].photos = JSON.parse(response[0].photos.toString());
-                responses.statusOk(req,resp, response);
+
+                let likeSql = `SELECT category_photo_id FROM user_likes WHERE user_id = ${userId}`;
+
+                database.exec(likeSql, (err, res) => {
+                    if(err) {
+                        responses.internalServerErr(req, res, messages.DATABASE_ERROR);
+                    }else {
+                        response[0].photos = JSON.parse(response[0].photos.toString());
+
+                        for(let i=0; i<res.length; i++) {
+                            for(let j=0; j<response[0].photos.length; j++) {
+                                if(!response[0].photos[j].user_liked) {
+                                    response[0].photos[j].user_liked = response[0].photos[j].category_photo_id === res[i].category_photo_id;
+                                }
+                            }
+                        }
+
+                        responses.statusOk(req,resp, response);
+                    }
+                })
             }
         });
     },

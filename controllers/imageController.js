@@ -6,11 +6,10 @@ let common = require("../common/common");
 
 module.exports = {
     uploadPicture: function (req, resp) {
-        let jwtToken = req.headers['authorization'].split(" ")[1];
 
-        let data = token.verify(jwtToken);
+        let userId = common.getUserId(req);
 
-        let insertSql = `INSERT INTO category_photos(photo_filename, image_title, image_description, user_id, category_id) VALUES ("${req.file.path}", "${req.body.image_title}", "${req.body.image_description}", ${data.user_id}, "${req.body.category_id}")`;
+        let insertSql = `INSERT INTO category_photos(photo_filename, image_title, image_description, user_id, category_id) VALUES ("${req.file.path}", "${req.body.image_title}", "${req.body.image_description}", ${userId}, "${req.body.category_id}")`;
 
         database.exec(insertSql, (error, _) => {
             if(error) {
