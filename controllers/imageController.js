@@ -36,7 +36,7 @@ module.exports = {
 
         let userId = common.getUserId(req);
 
-        let sql = `INSERT INTO user_likes(contest_photo_id, user_id) VALUES ("${req.params["imageId"]}", "${userId}")`;
+        let sql = `INSERT INTO user_likes(category_photo_id, user_id) VALUES ("${req.params["imageId"]}", "${userId}")`;
 
         database.exec(sql, (error, _) => {
             if(error) {
