@@ -46,5 +46,19 @@ module.exports = {
             }
         });
 
+    },
+    dislikeImage: function (req, resp) {
+        let userId = common.getUserId(req);
+
+        let sql = `DELETE FROM user_likes WHERE user_id = "${userId}" AND category_photo_id = "${req.params["imageId"]}"`;
+
+        database.exec(sql, (error, _) => {
+            if(error) {
+                responses.internalServerErr(req, resp, messages.DATABASE_ERROR);
+                return
+            }else {
+                responses.statusOk(req, resp, '{"message": "Image has been liked successfully !"}');
+            }
+        });
     }
 };

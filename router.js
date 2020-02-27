@@ -95,6 +95,7 @@ module.exports = function(app) {
             contestImage.post('/upload', upload.single('image'), imageController.uploadPicture);
             contestImage.delete('/:imageId', imageController.deleteImage);
             contestImage.post('/like/:imageId', imageController.likeImage);
+            contestImage.post('/dislike/:imageId', imageController.dislikeImage);
         });
     });
 
